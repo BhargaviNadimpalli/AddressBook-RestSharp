@@ -170,6 +170,35 @@ namespace AddressBookTest
                 Console.WriteLine(ex.Message);
             }
         }
+        [TestMethod]
+        public void TestMethodToDeleteDetails()
+        {
+            try
+            {
+                //Setting rest request to url and setiing method to delete to delete particular id
+                RestRequest request = new RestRequest("/addressBook/5", Method.DELETE);
+
+                //execute the request
+                IRestResponse response = client.Execute(request);
+
+                //Check by gettting all person details
+                IRestResponse restResponse = GetAllPersons();
+                //convert json object to person object
+                var res = JsonConvert.DeserializeObject<List<Person>>(restResponse.Content);
+
+
+                res.ForEach((x) =>
+                {
+                    Console.WriteLine($"id = {x.id} ,First name = {x.FirstName} , Last name = {x.LastName} , Phone number = {x.PhoneNumber} , address = {x.Address} , city ={x.City} , state = {x.State} , zipcode = {x.ZipCode} , emailid = {x.EmailId} ");
+                });
+                //Checking the response statuscode 200-ok
+                Assert.AreEqual(HttpStatusCode.OK, restResponse.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
 
     }
