@@ -68,7 +68,7 @@ namespace AddressBookTest
             IRestResponse response = default;
             try
             {
-                RestRequest request = new RestRequest("/persons", Method.POST);
+                RestRequest request = new RestRequest("/addressBook", Method.POST);
                 //adding type as json in request and pasing the json object as a body of request
                 request.AddParameter("application/json", json, ParameterType.RequestBody);
 
@@ -133,6 +133,42 @@ namespace AddressBookTest
                 Console.WriteLine(ex.Message);
             }
 
+        }
+        [TestMethod]
+        public void TestMethodToUpdateDetails()
+        {
+            try
+            {
+                //Setting rest request to url and setiing method to put to update details
+                RestRequest request = new RestRequest("/addressBook/4", Method.PUT);
+                //object for json
+                JsonObject json1 = new JsonObject();
+                //Adding new person details to json object
+                json1.Add("FirstName", "Neymarr");
+                json1.Add("LastName", "jrr");
+                json1.Add("PhoneNumber", 9874585876);
+                json1.Add("Address", "bandra");
+                json1.Add("City", "mumbai");
+                json1.Add("State", "maharashra");
+                json1.Add("ZipCode", 521963);
+                json1.Add("EmailId", "njjr@asd.com");
+                //adding type as json in request and pasing the json object as a body of request
+                request.AddParameter("application/json", json1, ParameterType.RequestBody);
+                //execute the request
+                IRestResponse response = client.Execute(request);
+                //deserialize json object to person class  object
+                var res = JsonConvert.DeserializeObject<Person>(response.Content);
+
+                //Checking the response statuscode 200  - ok
+                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+                //Printing deatils
+                Console.WriteLine($"id = {res.id} ,First name = {res.FirstName} , Last name = {res.LastName} , Phone number = {res.PhoneNumber} , address = {res.Address} , city ={res.City} , state = {res.State} , zipcode = {res.ZipCode} , emailid = {res.EmailId} ");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
 
